@@ -114,7 +114,7 @@ public class TestKataDefaultConstructorInvocation {
          *  Non-private constructors are looked up via "public lookups"
          *  Check API: java.lang.invoke.MethodHandles.publicLookup()
          */
-        MethodHandles.Lookup publicMethodHandlesLookup = null;
+        MethodHandles.Lookup publicMethodHandlesLookup = MethodHandles.publicLookup();
 
         /*
          * TODO:
@@ -123,7 +123,7 @@ public class TestKataDefaultConstructorInvocation {
          *  Default constructors have no parameters
          *  Check API: java.lang.invoke.MethodType.methodType(?)
          */
-        MethodType methodType = null; // HINT: MethodType.methodType(?);
+        MethodType methodType = MethodType.methodType(void.class); // HINT: MethodType.methodType(?);
 
         try {
 
@@ -135,7 +135,7 @@ public class TestKataDefaultConstructorInvocation {
              *  Check API: java.lang.invoke.MethodHandles.Lookup.findConstructor(?, ?)
              */
             MethodHandle demoClassConstructor =
-                    publicMethodHandlesLookup.findConstructor(null, null);
+                    publicMethodHandlesLookup.findConstructor(DemoClass.class, methodType);
             // Hint: Class and MethodType
 
             /*
@@ -148,7 +148,7 @@ public class TestKataDefaultConstructorInvocation {
              *  Check API: java.lang.invoke.MethodHandle.invokeExact()
              */
             DemoClass demoClass =
-                    null; //  Requires casting.
+                    (DemoClass) demoClassConstructor.invokeExact(); //  Requires casting.
 
             assertEquals(expectedOutput,
                     demoClass.printStuff(

@@ -48,13 +48,13 @@ public class TestKata1InstantAndDateInterop {
         // TODO: Replace the Instant.now() with an instant from classicDate.
         //  Use a Date API that converts Date instances into Instant instances.
         //  Check: java.util.Date.toInstant()
-        Instant instant = Instant.now();
+        Instant instant = classicDate.toInstant();
 
         // TODO: Replace the "null" below to get milliseconds from epoch from the Instant
         //  Use an Instant API which converts it into milliseconds
         //  Check: java.time.Instant.toEpochMilli()
         assertEquals(Long.valueOf(classicDate.getTime()),
-                null,
+                instant.toEpochMilli(),
                 "Date and Instant milliseconds should be equal");
     }
 
@@ -74,7 +74,7 @@ public class TestKata1InstantAndDateInterop {
         // NOTE: We use a custom assertion here since the millis to second arithmetic may cause
         //       rounding issues. We add a tolerance of 1 second.
         assertAlmostEquals(classicDateInSeconds,
-                null,
+                instant.getEpochSecond(),
                 1L,
                 "Date and Instant seconds should almost match");
     }
@@ -89,7 +89,7 @@ public class TestKata1InstantAndDateInterop {
         // TODO: Replace the string "-2" below to get nanos from the Instant
         //  Assert that instant has nano seconds.
         //  Check: java.time.Instant.getNano()
-        assertTrue(Integer.valueOf("-2") > -1,
+        assertTrue(instant.getNano() > -1,
                 "Instant should have nanoseconds");
     }
 
@@ -105,7 +105,7 @@ public class TestKata1InstantAndDateInterop {
         // TODO: Replace the "null" below to retrieve an instant as a string
         //  Assert that instant default toString matches the ISO8601 full date format.
         assertEquals(classicDateFormatter.format(classicDate),
-                null,
+                instant.toString(),
                 "Instant toString() should match ISO8601 format");
     }
 
@@ -126,7 +126,7 @@ public class TestKata1InstantAndDateInterop {
         // *****************************************************
         // TODO: Replace the "null" below to convert an Instant into a Date
         //  Check: java.util.Date.from()
-        Date anotherDate = null;
+        Date anotherDate = Date.from(instant);
         assertEquals(classicDate, anotherDate);
 
         // *****************************************************

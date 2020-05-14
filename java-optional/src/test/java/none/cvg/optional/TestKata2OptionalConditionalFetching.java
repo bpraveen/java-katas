@@ -50,7 +50,7 @@ public class TestKata2OptionalConditionalFetching {
          *  or return the defaultOptional (use a Supplier)
          *  Check API: java.util.Optional.or(?)
          */
-        Optional<String> nonNullOptional = Optional.empty();
+        Optional<String> nonNullOptional = anOptional.or(() -> defaultOptional);
 
         assertTrue(nonNullOptional instanceof Optional,
                 "The nonNullOptional should be an instance of Optional");
@@ -65,8 +65,8 @@ public class TestKata2OptionalConditionalFetching {
     @Order(2)
     public void orElseReturnValue() {
 
-        Integer anInteger = null;
-        Optional<Integer> nullableInteger = Optional.ofNullable(anInteger);
+        Integer anInteger = 10;
+        Optional<Integer> nullableInteger = Optional.ofNullable(null);
 
         /*
          * TODO:
@@ -74,7 +74,7 @@ public class TestKata2OptionalConditionalFetching {
          *  and the need to use get()
          *  Check API: java.util.Optional.orElse(?)
          */
-        Integer nonNullInteger = nullableInteger.or(() -> Optional.of(11)).get();
+        Integer nonNullInteger = nullableInteger.orElse(anInteger);
 
         assertTrue(nonNullInteger instanceof Integer,
                 "The nonNullInteger should be an instance of Integer");
@@ -99,7 +99,7 @@ public class TestKata2OptionalConditionalFetching {
          *  and the need to use get()
          *  Check API: java.util.Optional.ofNullable(?)
          */
-        String nonNullString = null;
+        String nonNullString = anOptional.orElse(defaultOptional);
 
         assertTrue(nonNullString instanceof String,
                 "The nonNullString should be an instance of String");
@@ -132,7 +132,7 @@ public class TestKata2OptionalConditionalFetching {
          *  Check API: java.util.Optional.orElseThrow()
          */
         assertThrows(NoSuchElementException.class, () -> {
-            String nonNullString = null;
+            anOptional.orElseThrow(() -> new NoSuchElementException("not found"));
         });
 
     }
@@ -156,10 +156,7 @@ public class TestKata2OptionalConditionalFetching {
          */
         Exception caughtException = assertThrows(
                 RuntimeException.class,
-                () -> {
-                    String nonNullString = null;
-
-                });
+                () -> anOptional.orElseThrow(exceptionSupplier));
 
         assertEquals("Empty value",
                 caughtException.getMessage(),
@@ -174,8 +171,8 @@ public class TestKata2OptionalConditionalFetching {
     public void ifPresentConsumeOrElseOtherAction() {
         AtomicInteger nonEmptyValueCounter = new AtomicInteger(0);
 
-        Consumer<Integer> nonEmptyValueAction = x -> nonEmptyValueCounter.getAndAdd(x);
-        Runnable alternateAction = nonEmptyValueCounter::getAndDecrement;
+        Consumer<Integer> nonEmptyValueAction = nonEmptyValueCounter::getAndAdd;
+        Runnable getAndDecrement = nonEmptyValueCounter::getAndDecrement;
 
         Optional<Integer> nonEmptyIntegerOptional = Optional.of(10);
 
@@ -185,7 +182,8 @@ public class TestKata2OptionalConditionalFetching {
          *  (depending on whether the optional has a value or not)
          *  Check API: java.util.Optional.ifPresentOrElse(?, ?)
          */
-//        nonEmptyIntegerOptional.???;
+
+        nonEmptyIntegerOptional.ifPresentOrElse(nonEmptyValueAction, getAndDecrement);
 
         assertEquals(10, nonEmptyValueCounter.get(), "");
 
@@ -197,7 +195,7 @@ public class TestKata2OptionalConditionalFetching {
          *  (depending on whether the optional has a value or not)
          *  Check API: java.util.Optional.ifPresentOrElse(?, ?)
          */
-//        emptyIntegerOptional.???
+        emptyIntegerOptional.ifPresentOrElse(nonEmptyValueAction, getAndDecrement);
 
         assertEquals(9, nonEmptyValueCounter.get(), "");
     }

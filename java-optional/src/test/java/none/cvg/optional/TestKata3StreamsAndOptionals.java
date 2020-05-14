@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -118,13 +119,19 @@ public class TestKata3StreamsAndOptionals {
          *  4.   map() to get the actual NameValuePair object, use Optional::get
          *  5.   collect() to a Set, use Collectors.toSet()
          */
-        Set<NameValuePair> actualNameValuePairs = new TreeSet<>();
-        for (String name : namesSet) {
-            NameValuePair nameValuePair = nameNameValuePairMap.get(name);
-            if (nameValuePair != null) {
-                actualNameValuePairs.add(nameValuePair);
-            }
-        }
+//        Set<NameValuePair> actualNameValuePairs = new TreeSet<>();
+//        for (String name : namesSet) {
+//            NameValuePair nameValuePair = nameNameValuePairMap.get(name);
+//            if (nameValuePair != null) {
+//                actualNameValuePairs.add(nameValuePair);
+//            }
+//        }
+//
+        Set<NameValuePair> actualNameValuePairs = namesSet.stream()
+                                                          .map(this::findOptionalNameValuePair)
+                                                          .filter(Optional::isPresent)
+                                                          .map(Optional::get)
+                                                          .collect(Collectors.toSet());
 
         assertEquals(
                 expectedSetOfNameValuePairs,
@@ -145,14 +152,15 @@ public class TestKata3StreamsAndOptionals {
          *  3.   flatMap() to include non empty Optionals, use Optional::stream flattener
          *  4.   collect() to a Set, use Collectors.toSet()
          */
-        Set<NameValuePair> actualNameValuePairs = new TreeSet<>();
-        for (String name : namesSet) {
-            NameValuePair nameValuePair = nameNameValuePairMap.get(name);
-            if (nameValuePair != null) {
-                actualNameValuePairs.add(nameValuePair);
-            }
-        }
+//        Set<NameValuePair> actualNameValuePairs = new TreeSet<>();
+//        for (String name : namesSet) {
+//            NameValuePair nameValuePair = nameNameValuePairMap.get(name);
+//            if (nameValuePair != null) {
+//                actualNameValuePairs.add(nameValuePair);
+//            }
+//        }
 
+        Set<NameValuePair> actualNameValuePairs = namesSet.stream().map(this::findOptionalNameValuePair).flatMap(Optional::stream).collect(Collectors.toSet());
         assertEquals(
                 expectedSetOfNameValuePairs,
                 actualNameValuePairs,

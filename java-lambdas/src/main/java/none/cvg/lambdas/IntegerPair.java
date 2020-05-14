@@ -2,7 +2,7 @@ package none.cvg.lambdas;
 
 public class IntegerPair {
 
-    public static String getDesctiption() {
+    public static String getDescription() {
         return "Integer Pair Holder";
     }
 

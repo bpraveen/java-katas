@@ -1,23 +1,8 @@
 package none.cvg.datetime;
 
-import java.time.Clock;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.Month;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import org.junit.jupiter.api.*;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import java.time.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -73,7 +58,7 @@ public class TestKata2LocalAndZonedDateTimes {
         // TODO: Replace the LocalDate.now() below to create a LocalDate of 2015-03-17.
         //  Fix LocalDate to a date of 2015-03-17. Try using integers for years, months and dates.
         //  Check : java.time.LocalDate.of(int, int, int)
-        LocalDate stPatricksDay2015 = LocalDate.now();
+        LocalDate stPatricksDay2015 = LocalDate.of(2015, 03, 17);
 
         assertEquals("2015-03-17",
                 stPatricksDay2015.toString(),
@@ -94,7 +79,7 @@ public class TestKata2LocalAndZonedDateTimes {
         // TODO: Replace the LocalDate.now() below to create a LocalDate of 1999-01-12.
         //  Fix LocalDate below to HAL's birthday. Use Month enums.
         //  No longer a confusion about whether January is 0 or 1.
-        LocalDate halsBirthday = LocalDate.now();
+        LocalDate halsBirthday = LocalDate.of(1999, Month.JANUARY, 12);
 
         assertEquals(1999,
                 halsBirthday.getYear(),
@@ -123,6 +108,7 @@ public class TestKata2LocalAndZonedDateTimes {
         //  The LocalDate should thus read 1997-08-29
         //  Check: java.time.LocalDate.now(java.time.Clock)
         //-----------------------------------------
+
         LocalDate theOriginalJudgementDDate = LocalDate.now();
 
         assertEquals(1997,
@@ -151,7 +137,7 @@ public class TestKata2LocalAndZonedDateTimes {
         //  Fix LocalTime to 07:52 AM, using LocalTime with integers for hours and minutes.
         //  Check: java.time.LocalTime.of(int, int)
         //-----------------------------------------
-        LocalTime sevenFiftyTwoAm = LocalTime.now();
+        LocalTime sevenFiftyTwoAm = LocalTime.of(7, 52);
 
         assertEquals("07:52",
                 sevenFiftyTwoAm.toString(),
@@ -169,7 +155,7 @@ public class TestKata2LocalAndZonedDateTimes {
         //  There is another test below that will show how this time can be displayed in
         //  Eastern Time (Washington DC / New York City).
         //  Check: java.time.LocalTime.now(java.time.Clock)
-        LocalTime theOriginalJudgementDayTime = LocalTime.now();
+        LocalTime theOriginalJudgementDayTime = LocalTime.now(terminatorOriginalJudgementDay);
 
         assertEquals(2,
                 theOriginalJudgementDayTime.getHour(),
@@ -189,7 +175,7 @@ public class TestKata2LocalAndZonedDateTimes {
         //  Fix LocalDateTime to a date of 2005-05-05 and a time on 05:05:05 AM.
         //  Check: java.time.LocalDateTime.of(int, int, int, int, int, int)
         LocalDateTime allDateTimeOhFives =
-                LocalDateTime.now();
+                LocalDateTime.of(2005, 05, 05, 05, 05, 05);
 
         assertTrue(allDateTimeOhFives.getMonthValue() == 5,
                 "The month should be May (5th Month)");
@@ -211,7 +197,7 @@ public class TestKata2LocalAndZonedDateTimes {
         //  Fix LocalDateTime to the exact date-time of the Terminator (Original) Judgement Day.
         //  Check: java.time.LocalDateTime.now(java.time.Clock)
         LocalDateTime theOriginalJudgementDayDateTime =
-                LocalDateTime.now();
+                LocalDateTime.now(terminatorOriginalJudgementDay);
 
         assertEquals(8,
                 theOriginalJudgementDayDateTime.getMonthValue(),
@@ -249,7 +235,8 @@ public class TestKata2LocalAndZonedDateTimes {
         //  Check: java.time.ZonedDateTime.withZoneSameInstant(java.time.ZoneId)
         //-----------------------------------------
         ZonedDateTime gmtPlusOneDateTimeAtAllFivesInGmtMinusFive =
-                ZonedDateTime.now();
+                allDateTimeOhFives
+                .withZoneSameInstant(gmtPlusOneZoneId);
 
         assertEquals(3600,
                 gmtPlusOneDateTimeAtAllFivesInGmtMinusFive.getOffset().getTotalSeconds(),
@@ -323,7 +310,6 @@ public class TestKata2LocalAndZonedDateTimes {
         //  Check: java.time.ZonedDateTime.toInstant()
         ZonedDateTime gmtPlusOneHourTimeForAllFives =
                 ZonedDateTime.now();
-
 
 
         assertEquals(10,
